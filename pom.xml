@@ -13,4 +13,17 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
 </project>

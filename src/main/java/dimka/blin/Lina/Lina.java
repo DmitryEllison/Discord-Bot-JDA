@@ -1,5 +1,7 @@
 package dimka.blin.Lina;
 
+import dimka.blin.Lina.util.BotProperties;
+import dimka.blin.Lina.util.MessageLog;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -11,32 +13,26 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Lina {
-    private static String token;
     private JDA bot;
+    private BotProperties BP;
 
-    public Lina(String token, OnlineStatus status) throws LoginException {
+    public Lina(String botPropertiesURL, String gameName, OnlineStatus status) throws LoginException {
+        BP = new BotProperties(botPropertiesURL);
         try{
-            this.bot = JDABuilder.createDefault(token).
-                    setActivity(Activity.playing("NO GAME")).
+            this.bot = JDABuilder.createDefault(BP.getToken()).
+                    setActivity(Activity.playing(gameName)).
                     setStatus(status).
+                    setAutoReconnect(true).
+                    addEventListeners(new MessageLog(this)).
                     build();
         } catch (LoginException e){
             System.out.println("Incorrect token");
         }
 
+
     }
 
-    public static void main(String[] args) throws LoginException, IOException {
-        Properties info = new Properties();
-        try{
-            info.load(new FileInputStream("C:\\Users\\dimka\\IdeaProjects\\Lina\\src\\main\\java\\dimka\\blin\\Lina\\token.cfg"));
-            token = info.getProperty("token");
-        } catch (IOException e){
-            System.out.println("Cannot find a token file.");
-            e.printStackTrace();
-            System.exit(0);
-        }
-
-        Lina bot = new Lina(token, OnlineStatus.IDLE);
+    public BotProperties getBP() {
+        return BP;
     }
 }
